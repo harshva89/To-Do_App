@@ -77,12 +77,15 @@ function HomeScreen({ navigation }) {
 
   return (
     <ImageBackground source={require('./Components/home.png')} resizeMode="cover" style={styles.image}>
+    <View style={{display:'flex', flexDirection:'row'}}>
+      <Text style={styles.heading}>To-Do List</Text>
       <TouchableOpacity
         style={styles.deleteAll}
         onPress={() =>{ deleteAll() }}>
           <Icon name="trash-o" size={33} color="#5cadff" ></Icon>
           <Text style={{fontSize:10}}>Delete All</Text>
       </TouchableOpacity>
+    </View>
     <View style={styles.container}>
       <View style={styles.tasksWrapper}>
         <View style={styles.items}>
@@ -167,10 +170,20 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  heading:{
+    fontSize:35,
+    padding:30,
+    fontWeight:'bold',
+    flex:1,
+    marginTop:10,
+    textShadowColor: 'rgba(0, 0, 0, 0.35)',
+  textShadowOffset: {width: 2, height: 2},
+  textShadowRadius: 10
+  },
   deleteAll:{
     alignSelf:'flex-end',
-    marginTop:35,
-    marginRight:20,
+    paddingBottom:22,
+    marginRight:10,
     display:'flex',
     alignItems:'center'
   },
