@@ -14,6 +14,8 @@ This is a simple To-Do app, used to store tasks. Users can add new tasks, and de
 
 ## Demonstration
 
+Alternate Drive Link: <a href='https://drive.google.com/drive/folders/1tHT92r88n0e800qa_32bQk189PrbBjAL?usp=sharing'>Click Here</a>
+
 ### Adding new task
 New tasks can be simply added by writing a new note and pressing the add button.<br>
 
