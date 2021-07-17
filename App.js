@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   KeyboardAvoidingView,
   Text,
   TextInput,
-  useColorScheme,
   View,
   Platform,
   TouchableOpacity,
@@ -18,15 +14,11 @@ import {
   Alert,
 } from 'react-native';
 
-
 import Task from './Components/Tasks';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import DropDownPicker from 'react-native-dropdown-picker';
-
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-
 
 function HomeScreen({ navigation }) {
   const [task, setTask] = useState();
@@ -37,7 +29,7 @@ function HomeScreen({ navigation }) {
       const jsonValue = JSON.stringify(value)
       await AsyncStorage.setItem('taskItemsList1', jsonValue)
     } catch (e) {
-      // saving error
+      Alert.alert(e);
     }
   }
 
@@ -52,28 +44,27 @@ function HomeScreen({ navigation }) {
       alert(e)
     }
   }
-
   
-  const completeTask = (index) => {
-      let itemsCopy = [...taskItems];
-      itemsCopy.splice(index, 1);
-      setTaskItems(itemsCopy)
-      storeData(itemsCopy)
-    }
+  const removeTask = (index) => {
+    let itemsCopy = [...taskItems];
+    itemsCopy.splice(index, 1);
+    setTaskItems(itemsCopy)
+    storeData(itemsCopy)
+  }
 
   const deleteAll = () => {
     setTaskItems([])    
     storeData([])
-
   }
 
-
-  const handleAddTask = () => {
+  const addNewTask = () => {
     console.log(task)
     Keyboard.dismiss();
     if(task!=undefined)
-    {setTaskItems([...taskItems, task])    
-    storeData([...taskItems, task])}
+    {
+      setTaskItems([...taskItems, task])    
+      storeData([...taskItems, task])
+    }
     else{
       Alert.alert("No text entered!")
     }
@@ -84,36 +75,30 @@ function HomeScreen({ navigation }) {
     readData()
   }, [])
 
-
   return (
     <ImageBackground source={require('./Components/home.png')} resizeMode="cover" style={styles.image}>
       <TouchableOpacity
-      style={styles.deleteAll}
-          onPress={() =>{ deleteAll() }}>
+        style={styles.deleteAll}
+        onPress={() =>{ deleteAll() }}>
           <Icon name="trash-o" size={33} color="#5cadff" ></Icon>
           <Text style={{fontSize:10}}>Delete All</Text>
-        </TouchableOpacity>
+      </TouchableOpacity>
     <View style={styles.container}>
-
       <View style={styles.tasksWrapper}>
-
         <View style={styles.items}>
           {
             taskItems.map((item, index) => {
               return (
                 <View style={styles.eachTask}>
-                    <Task key={index} text={item}></Task>
-                    <TouchableOpacity style={styles.delete} onPress={()=>completeTask(index)}>
-                  <Icon name="trash" size={24} color="#fc0000" ></Icon>
-                </TouchableOpacity>
-                
+                  <Task key={index} text={item}></Task>
+                  <TouchableOpacity style={styles.delete} onPress={()=>removeTask(index)}>
+                    <Icon name="trash" size={24} color="#fc0000" ></Icon>
+                  </TouchableOpacity>
                 </View>
               ) 
             })
           }
-
         </View>
-
       </View>
 
       <KeyboardAvoidingView
@@ -121,7 +106,7 @@ function HomeScreen({ navigation }) {
         style={styles.writeTaskWrapper}>
         <TextInput style={styles.input} placeholder={'New task'} value={task} onChangeText={text => setTask(text)} />
         <TouchableOpacity
-          onPress={() => handleAddTask()}>
+          onPress={() => addNewTask()}>
           <View style={styles.addWrapper}>
             <Icon name="plus-circle" size={33} color="#5cadff" ></Icon>
           </View>
@@ -133,36 +118,34 @@ function HomeScreen({ navigation }) {
 }
 
 function About({ navigation }) {
-  
   return(
     <ImageBackground source={require('./Components/about.png')} resizeMode="cover" style={styles.image}>
-        <View style={styles.aboutView}>
-          <Text style={styles.aboutText}>
-            This app is made to to store tasks as a To-Do list. This data is stored using AsyncStorage, and will not be lost on closing. Users can add new tasks and complete previous tasks via an easy interface.
+      <View style={styles.aboutView}>
+        <Text style={styles.aboutText}>
+          This is a simple To-Do app, used to store your tasks. New tasks can be added, and deleted. The data is stored in local storage using AsyncStorage.
+        </Text>
+        <Text>Made By:</Text>
+        <Text style={styles.madeBy}>Harsh Vaswani</Text>
+        <View style={{display:'flex', flexDirection:'row', paddingVertical:5}}>
+          <Icon name="github" size={33} color="#000" ></Icon>
+          <Text style={styles.hyplink}
+          onPress={() => Linking.openURL('https://github.com/harshva89')}>GitHub
           </Text>
-          <Text>Made By:</Text>
-          <Text style={styles.madeBy}>Harsh Vaswani</Text>
-          <View style={{display:'flex', flexDirection:'row', paddingVertical:5}}>
-            <Icon name="github" size={33} color="#000" ></Icon>
-            <Text style={styles.hyplink}
-            onPress={() => Linking.openURL('https://github.com/harshva89')}>GitHub
-            </Text>
-          </View>
-          <View style={{display:'flex', flexDirection:'row', paddingVertical:5}}>
-            <Icon name="linkedin" size={33} color="#0077b5" ></Icon>
-            <Text style={styles.hyplink}
-            onPress={() => Linking.openURL('https://www.linkedin.com/in/harshvaswani89/')}>LinkedIn
-            </Text>
-          </View>
-          <View style={{display:'flex', flexDirection:'row', paddingVertical:5}}>
-            <Icon name="envelope" size={33} color="#FFF" ></Icon>
-            <Text style={styles.hyplink}
-            onPress={() => Linking.openURL('mailto:harshvaswani89@gmail.com')}>Mail
-            </Text>
-          </View>
-          
         </View>
-      </ImageBackground>
+        <View style={{display:'flex', flexDirection:'row', paddingVertical:5}}>
+          <Icon name="linkedin" size={33} color="#0077b5" ></Icon>
+          <Text style={styles.hyplink}
+          onPress={() => Linking.openURL('https://www.linkedin.com/in/harshvaswani89/')}>LinkedIn
+          </Text>
+        </View>
+        <View style={{display:'flex', flexDirection:'row', paddingVertical:5}}>
+          <Icon name="envelope" size={33} color="#FFF" ></Icon>
+          <Text style={styles.hyplink}
+          onPress={() => Linking.openURL('mailto:harshvaswani89@gmail.com')}>Mail
+          </Text>
+        </View>
+      </View>
+    </ImageBackground>
   )
 }
 
@@ -260,7 +243,6 @@ aboutText:{
   eachTask:{
     display: 'flex',
     flexDirection: 'row',
-    // justifyContent: 'flex-start',
   },
   delete:{
     paddingVertical:15,
